@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  username  String   @unique
+  role      Role     @default(USER)
+  chats     Chat[]
+  tickets   Ticket[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Chat {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  messages Message[]
+  User     User?     @relation(fields: [userId], references: [id])
+  userId   String?   @db.ObjectId
+}
+
+model Message {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  text   String
+  from   Role
+  Chat   Chat?   @relation(fields: [chatId], references: [id])
+  chatId String? @db.ObjectId
+}
+
+model Ticket {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  ticketTitle       String
+  ticketDescription String
+  ticketSeverity    Severity
+  submittedBy       String
+  takenBy           User?    @relation(fields: [takenById], references: [id])
+  takenById         String?  @db.ObjectId
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}

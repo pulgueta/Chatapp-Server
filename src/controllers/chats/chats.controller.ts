@@ -17,5 +17,8 @@ export class ChatsController {
         }
     };
 
-    getMessages = async (req: Request, res: Response) => {};
+    getMessages = async (req: Request, res: Response) => {
+        const messages = await this.chatService.getMessages(req.params.id);
+        return res.send(messages);
+    };
 }

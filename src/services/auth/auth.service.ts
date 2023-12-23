@@ -9,6 +9,7 @@ export class AuthService {
     constructor() {}
 
     public async register(userData: Register) {
+        console.log('service', userData);
         const emailIsTaken = await prisma.user.findUnique({
             where: {
                 email: userData.email,

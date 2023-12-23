@@ -47,6 +47,12 @@ export class TicketsService {
                 },
             });
 
+            await prisma.chat.create({
+                data: {
+                    id: ticket.id,
+                },
+            });
+
             return ticket;
         } catch (error) {
             return {

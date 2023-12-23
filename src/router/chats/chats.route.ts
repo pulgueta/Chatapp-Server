@@ -11,7 +11,7 @@ export class ChatRoutes {
         const chatController = new ChatsController(chatService);
 
         router.post('/', chatController.createMessageController);
-        router.get('/', chatController.getMessages);
+        router.get('/:id', chatController.getMessages);
 
         return router;
     }

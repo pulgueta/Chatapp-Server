@@ -53,6 +53,7 @@ export type Ticket = TypeOf<typeof ticketSchema>;
 export const messageSchema = z.object({
     message: z.string().min(4, 'Message must be at least 4 characters long.'),
     role: z.enum(['USER', 'ADMIN']),
+    id: z.string().min(4, 'ID must be at least 4 characters long.'),
 });
 
 export type Message = TypeOf<typeof messageSchema>;

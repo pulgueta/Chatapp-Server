@@ -7,6 +7,7 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     registerController = async (req: Request, res: Response) => {
+        console.log('controller', req.body);
         const parsedBody = registerSchema.safeParse(req.body);
 
         if (parsedBody.success) {

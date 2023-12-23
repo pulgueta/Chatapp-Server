@@ -1,31 +1,38 @@
-import Express, { Router, json, static as serveStatic } from 'express';
-import cors from 'cors';
+import express, { Router, json } from 'express';
 
 interface Options {
     port: number;
-    routes: Router;
+
+    public_path?: string;
 }
 
 export class Server {
-    private app = Express();
+    public readonly app = express();
+    private serverListener?: any;
     private readonly port: number;
 
-    private readonly routes: Router;
-
     constructor(options: Options) {
-        const { port, routes } = options;
+        const { port } = options;
         this.port = port;
-        this.routes = routes;
+
+        this.configure();
+    }
+
+    private configure() {
+        this.app.use(json());
+    }
+
+    public setRoutes(router: Router) {
+        this.app.use(router);
     }
 
     async start() {
-        this.app.disable('x-powered-by');
-        this.app.use(json());
-        this.app.use(cors());
-        this.app.use(this.routes);
-
-        this.app.listen(this.port, () => {
-            console.log(`[*] Server running on port ${this.port}`);
+        this.serverListener = this.app.listen(this.port, () => {
+            console.log(`Server running on port ${this.port}`);
         });
+    }
+
+    public close() {
+        this.serverListener?.close();
     }
 }
